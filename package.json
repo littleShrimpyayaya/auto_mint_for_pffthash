@@ -1,0 +1,14 @@
+{
+  "name": "pffthash-auto",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local browser automation for pffthash.com and MetaMask confirmation flow.",
+  "scripts": {
+    "start": "node src/auto-mint.js",
+    "start:chrome-default": "set PFF_USE_CHROME_DEFAULT=1&& node src/auto-mint.js",
+    "start:cdp": "set PFF_CDP_URL=http://127.0.0.1:9222&& node src/auto-mint.js"
+  },
+  "dependencies": {
+    "playwright-core": "^1.53.0"
+  }
+}
