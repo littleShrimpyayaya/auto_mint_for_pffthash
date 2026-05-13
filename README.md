@@ -7,7 +7,7 @@
 1. 检测 `https://pffthash.com/` 首页按钮是否变成 `Sign & Mint`
 2. 自动点击 `Sign & Mint`
 3. 自动点击 MetaMask 里的 `确认 / Confirm`
-4. MetaMask 确认后，不等待 MetaMask 的 `回到首页`
+4. MetaMask 确认后，如果出现 `回到首页 / 返回首页`，自动点击
 5. 继续监控 pffthash 页面，页面可以开始下一轮时自动点击
 
 工具不会读取助记词、私钥、钱包密码或 Google 账号密码。它只负责点击已经打开的浏览器页面。
@@ -116,7 +116,7 @@ npm.cmd run start:cdp
 
 ### 成功确认交易，但 MetaMask 还停在回首页页面
 
-这是正常的。MetaMask 里的 `回到首页` 和 pffthash 下一轮没有关联，脚本不会等待它。
+这是正常的。MetaMask 里的 `回到首页 / 返回首页` 和 pffthash 下一轮没有关联，脚本会把它当作 MetaMask 独立 UI 自动点击。
 
 脚本只要点完 MetaMask 的 `确认 / Confirm`，就会继续监控 pffthash 页面。等 pffthash 页面再次出现 `Sign & Mint`，脚本会自动开始下一轮。
 
@@ -173,7 +173,7 @@ This tool connects to Chrome with Playwright and automates the pffthash minting 
 1. Detect `Sign & Mint` on `https://pffthash.com/`
 2. Click `Sign & Mint`
 3. Click `Confirm` in MetaMask
-4. Do not wait for MetaMask `Back Home`
+4. Click MetaMask `Back Home` if it appears
 5. Keep polling pffthash and start the next round when the site is ready
 
 It does not read seed phrases, private keys, wallet passwords, or Google passwords. It only clicks pages that are already open in your browser.

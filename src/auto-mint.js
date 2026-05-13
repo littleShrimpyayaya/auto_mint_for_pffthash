@@ -105,7 +105,29 @@ async function clickMetaMaskConfirm(page) {
   return false;
 }
 
-async function clickBackHome(page) {
+async function clickMetaMaskBackHome(page) {
+  if (!page.url().startsWith(`chrome-extension://${METAMASK_ID}/`)) return false;
+
+  const zhBackHome = String.fromCharCode(0x8fd4, 0x56de, 0x9996, 0x9875);
+  const zhGoHome = String.fromCharCode(0x56de, 0x5230, 0x9996, 0x9875);
+  const backHomeText = new RegExp(`${zhBackHome}|${zhGoHome}|Back\\s*Home|Go\\s*Home`, 'i');
+  const locators = [
+    page.getByRole('button', { name: backHomeText }),
+    page.locator('button[data-testid="home__button"]'),
+    page.locator('button:has-text("Back Home")'),
+    page.locator('button:has-text("Go Home")'),
+    page.locator(`button:has-text("${zhBackHome}")`),
+    page.locator(`button:has-text("${zhGoHome}")`),
+  ];
+
+  for (const locator of locators) {
+    if (await clickLocator(locator, 'MetaMask back-home')) return true;
+  }
+
+  return false;
+}
+
+async function clickSiteBackHome(page) {
   const backHomeText = /\u56de\u5230\u9996\u9875|\u8fd4\u56de\u9996\u9875|Back\s*Home|Home|Go\s*Home/i;
   const locators = [
     page.getByRole('button', { name: backHomeText }),
@@ -264,6 +286,13 @@ async function main() {
 
     try {
       for (const page of context.pages()) {
+        const returnedHome = await clickMetaMaskBackHome(page).catch((error) => {
+          log(`MetaMask back-home check failed: ${error.message}`);
+          return false;
+        });
+
+        if (returnedHome) continue;
+
         const confirmed = await clickMetaMaskConfirm(page).catch((error) => {
           log(`MetaMask check failed: ${error.message}`);
           return false;
@@ -284,7 +313,7 @@ async function main() {
       if (sitePage.isClosed()) throw new Error('Site page is closed.');
 
       if (mintInProgress) {
-        await clickBackHome(sitePage);
+        await clickSiteBackHome(sitePage);
       }
 
       const mintReady = await sitePage.evaluate(() => {
